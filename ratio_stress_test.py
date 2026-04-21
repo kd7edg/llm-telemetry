@@ -2,7 +2,7 @@ import time
 from main import ask_ai
 
 def run_stress_test():
-    print("🚀 Starting Oculum Ratio Stress Test...")
+    print("🚀 Starting LLM-Telemetry Ratio Stress Test...")
     
     # 1. THE "IDEAL" RATIO (High Efficiency)
     # Very short prompt, long descriptive answer.

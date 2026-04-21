@@ -1,3 +1,3 @@
 nohup otelcol-contrib \
-    --config=/home/julio/Projects/oculum/otel-config.yaml \
-    > /home/julio/Projects/oculum/otel.log 2>&1 &
+    --config=/home/julio/Projects/llm-telemetry/otel-config.yaml \
+    > /home/julio/Projects/llm-telemetry/otel.log 2>&1 &

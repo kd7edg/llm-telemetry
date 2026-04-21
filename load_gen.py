@@ -2,7 +2,7 @@ import time
 import random
 from main import ask_ai  # Ensure your main.py is in the same folder
 
-# A list of 50 diverse prompts to stress-test your Oculum service
+# A list of 50 diverse prompts to stress-test your LLM-Telemetry service
 PROMPTS = [
     "Explain quantum entanglement like I'm five.",
     "Write a Python script to scrape a website.",

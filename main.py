@@ -14,7 +14,7 @@ import time
 
 # 1. Define who this service is
 resource = Resource(attributes={
-    "service.name": "Oculum",          # This shows up in Jaeger
+    "service.name": "LLM-Telemetry",          # This shows up in Jaeger
     "service.version": "1.0.0",
     "deployment.environment": "local-dev"
 })
@@ -112,7 +112,7 @@ def ask_ai(prompt,model_name="llama3"):
             return result
 
 if __name__ == "__main__":
-    print("Oculum: Sending prompt to Radeon 7900 XT...")
+    print("LLM-Telemetry: Sending prompt to Radeon 7900 XT...")
     output = ask_ai("Explain why observability is key for local AI.")
     print(f"\nAI Response: {output}")
     provider.shutdown()

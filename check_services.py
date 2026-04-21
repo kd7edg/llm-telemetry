@@ -26,7 +26,7 @@ def check_process(name, command):
 
 
 def main():
-    print("--- Oculum Stack Health Check ---")
+    print("--- LLM-telemetry Stack Health Check ---")
     
     # 1. OTel Collector
     # Checks port 4317 and the binary name
