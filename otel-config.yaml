@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  # This sends traces to Jaeger
+  otlp/jaeger:
+    endpoint: "127.0.0.1:4319"
+    tls:
+      insecure: true
+
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    metric_expiration: 15m
+
+  # Useful for debugging in your terminal
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp/jaeger, debug]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, debug]
