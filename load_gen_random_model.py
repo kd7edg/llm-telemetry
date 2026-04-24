@@ -1,8 +1,10 @@
 import time
 import random
-from main import ask_ai  # Ensure your main.py is in the same folder
+import requests
 
-# A list of 50 diverse prompts to stress-test your Oculum service
+# The URL where your FastAPI app is running
+API_URL = "http://localhost:8000/infer"
+
 PROMPTS = [
     "Explain quantum entanglement like I'm five.",
     "Write a Python script to scrape a website.",
@@ -56,32 +58,43 @@ PROMPTS = [
     "Explain the concept of 'agentic AI'."
 ]
 
-# Added model list and randomizer
 MODELS = ["llama3", "mistral", "phi3"]
-
-def get_random_model():
-    """Randomly selects a model from the list."""
-    return random.choice(MODELS)
+USER_IDS = ["user_123", "user_456", "user_789", "admin_01"]
+TEMPLATES = ["default-v1", "creative-v2", "concise-v1"]
 
 def run_load_generator(iterations=100):
-    print(f"🚀 Starting Load Generator: Sending {iterations} random prompts across multiple models...")
+    print(f"🚀 Starting Multi-Model Load Generator: Sending {iterations} requests to {API_URL}...")
     
-    for i in range(iterations):
-        prompt = random.choice(PROMPTS)
-        model = get_random_model()  # Randomly select model
-        print(f"\n[{i+1}/{iterations}] Model: {model} | Prompt: {prompt}")
-        
-        try:
-            # Passes the randomly selected model to your ask_ai function
-            response = ask_ai(prompt, model_name=model)
-            print(f"✅ Success! Response received ({len(response)} chars)")
-        except Exception as e:
-            print(f"❌ Error during generation: {e}")
-        
-        # Random delay between 5 and 45 seconds to create a realistic Grafana curve
-        delay = random.randint(5, 45)
-        print(f"⏳ Waiting {delay} seconds before next prompt...")
-        time.sleep(delay)
+    with requests.Session() as session:
+        for i in range(iterations):
+            prompt = random.choice(PROMPTS)
+            model = random.choice(MODELS)
+            user_id = random.choice(USER_IDS)
+            template = random.choice(TEMPLATES)
+            
+            print(f"\n[{i+1}/{iterations}] Model: {model} | Prompt: {prompt[:50]}...")
+            
+            try:
+                params = {
+                    "prompt": prompt,
+                    "user_id": user_id,
+                    "template": template,
+                    "model": model  
+                }
+                
+                response = session.post(API_URL, params=params, timeout=180.0)
+                response.raise_for_status()
+                
+                data = response.json()
+                print(f"✅ Success! Response received ({len(data.get('response', ''))} chars)")
+                
+            except Exception as e:
+                print(f"❌ Error during API request: {e}")
+            
+            # Realistic delay for Grafana metrics
+            delay = random.randint(5, 45)
+            print(f"⏳ Waiting {delay} seconds...")
+            time.sleep(delay)
 
 if __name__ == "__main__":
     run_load_generator()

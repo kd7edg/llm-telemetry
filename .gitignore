@@ -1,0 +1,17 @@
+# --- Python Specific ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# --- Local Archive/Storage ---
+archive/
+
+# --- Logs and Process IDs ---
+*.log
+*.pid
+
+# --- Tool Specific ---
+# data/

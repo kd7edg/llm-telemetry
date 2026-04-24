@@ -1,8 +1,10 @@
 import time
 import random
-from main import ask_ai  # Ensure your main.py is in the same folder
+import requests
 
-# A list of 50 diverse prompts to stress-test your LLM-Telemetry service
+# The URL where your FastAPI app is running
+API_URL = "http://localhost:8000/infer"
+
 PROMPTS = [
     "Explain quantum entanglement like I'm five.",
     "Write a Python script to scrape a website.",
@@ -56,24 +58,44 @@ PROMPTS = [
     "Explain the concept of 'agentic AI'."
 ]
 
+# Variables to populate your high-cardinality OTel attributes
+USER_IDS = ["user_123", "user_456", "user_789", "admin_01"]
+TEMPLATES = ["default-v1", "creative-v2", "concise-v1"]
+
 def run_load_generator(iterations=100):
-    print(f"🚀 Starting Load Generator: Sending {iterations} random prompts...")
+    print(f"🚀 Starting Load Generator: Sending {iterations} requests to {API_URL}...")
     
-    for i in range(iterations):
-        prompt = random.choice(PROMPTS)
-        print(f"\n[{i+1}/{iterations}] Prompt: {prompt}")
-        
-        try:
-            # Calls your instrumented ask_ai function from main.py
-            response = ask_ai(prompt)
-            print(f"✅ Success! Response received ({len(response)} chars)")
-        except Exception as e:
-            print(f"❌ Error during generation: {e}")
-        
-        # Random delay between 5 and 45 seconds to create a realistic Grafana curve
-        delay = random.randint(5, 45)
-        print(f"⏳ Waiting {delay} seconds before next prompt...")
-        time.sleep(delay)
+    # Using a session is more efficient for repeated requests
+    with requests.Session() as session:
+        for i in range(iterations):
+            prompt = random.choice(PROMPTS)
+            user_id = random.choice(USER_IDS)
+            template = random.choice(TEMPLATES)
+            
+            print(f"\n[{i+1}/{iterations}] Prompt: {prompt[:50]}...")
+            
+            try:
+                # FastAPI expects these as query parameters based on your @app.post definition
+                params = {
+                    "prompt": prompt,
+                    "user_id": user_id,
+                    "template": template
+                }
+                
+                # Send the POST request to the FastAPI endpoint
+                response = session.post(API_URL, params=params, timeout=180.0)
+                response.raise_for_status()
+                
+                data = response.json()
+                print(f"✅ Success! Response received ({len(data.get('response', ''))} chars)")
+                
+            except Exception as e:
+                print(f"❌ Error during API request: {e}")
+            
+            # Delay to create a realistic curve in your Grafana dashboard
+            delay = random.randint(5, 45)
+            print(f"⏳ Waiting {delay} seconds before next prompt...")
+            time.sleep(delay)
 
 if __name__ == "__main__":
     run_load_generator()
