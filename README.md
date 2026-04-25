@@ -1,6 +1,4 @@
-# 👁️ Oculum — Real-Time OpenTelemetry Observability for AI Agents
-
-> *Oculum (Latin: "eye")* — A production-grade observability pipeline that captures every span, token, cost, and latency measurement across your local AI inference stack.
+# LLM-Telemetry — Real-Time OpenTelemetry Observability for AI Agents
 
 [![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-Instrumented-blueviolet)](https://opentelemetry.io/)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](https://python.org)
