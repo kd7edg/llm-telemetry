@@ -1,8 +1,7 @@
 # Project Roadmap & TODO
 
 ## 🚀 High Priority
-- [ ] 
-- [ ]
+- [x] Initial project setup and folder structure
 
 ## ✨ Features
 - [ ] Add more troubleshooting to README
@@ -10,12 +9,6 @@
 
 ## 🛠 Refactoring & Technical Debt
 - [ ] Refactor to use podman compose
-- [ ] 
 
 ## 📝 Documentation
 - [x] Write README
-- [ ]
-
-## ✅ Completed
-- [x] Initial project setup and folder structure
-- [x] 
